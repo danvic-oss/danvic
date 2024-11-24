@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxury Real Estate Listings</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  <style>
+    /* Internal CSS */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f8f8;
+    }
+
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 36px;
+    }
+
+    .navbar {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    .navbar li {
+      display: inline;
+      margin: 0 15px;
+    }
+
+    .navbar a {
+    
+      color: yellow;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .search-container {
+      background-color: #34495e;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-bar {
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .search-btn {
+      padding: 10px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .property-item {
+      background-color: white;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .property-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .property-item h3 {
+      font-size: 22px;
+      margin-top: 10px;
+      color: #2c3e50;
+    }
+
+    .property-item p {
+      font-size: 16px;
+      color: #7f8c8d;
+    }
+    
+    .overlay {
+    /* Height & width depends on how you want to reveal the overlay (see JS below) */   
+    height: 100%;
+    width: 0;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    background-color: rgb(0,0,0); /* Black fallback color */
+    background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+    }
+    
+    /* Position the content inside the overlay */
+    .overlay-content {
+    position: relative;
+    top: 25%; /* 25% from the top */
+    width: 100%; /* 100% width */
+    text-align: center; /* Centered text/links */
+    margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+    }
+    
+    /* The navigation links inside the overlay */
+    .overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block; /* Display block instead of inline */
+    transition: 0.3s; /* Transition effects on hover (color) */
+    }
+    
+    /* When you mouse over the navigation links, change their color */
+    .overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+    }
+    
+    /* Position the close button (top right corner) */
+    .overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+    }
+    
+    /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+    @media screen and (max-height: 450px) {
+    .overlay a {font-size: 20px}
+    .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+    }
+    }
+    
+    .hidden {
+    display:none;
+    }
+
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: ;
+      width: 100%;
+      bottom: 0;
+    }
+form input{
+padding: 10px;
+      background-color: white;
+      color: ;
+      border: solid yellow;
+      border-radius: 5px;
+      cursor: pointer;
+}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Danvic Real Estate Listings</h1>
+  <ul class="navbar">
+    <li><a href="#" id="show-home"><b>Home</b></a></li>
+    <li><a href="#" id="buy-me"><b>Buy</b></a></li>
+    <li><a href="#" id="rent-me"><b>Rent</b></a></li>
+    <li><a href="#" id="sell-me"><b>Sell</b></a></li>
+  </ul>
+  <main>
+  
+  <div id="myNav" class="overlay">
+  
+  <!-- Button to close the overlay navigation -->
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  
+  <!-- Overlay content -->
+  <div class="overlay-content">
+  <a href="#" onclick="About()" id="show-about">About</a>
+  <a href="#" onclick="Service()" id="show-service">Services</a>
+  <a href="#" onclick="client()"id="show-client">Clients</a>
+  <a href="#" onclick="contact()"id="show-contact">Contact</a>
+  </div>
+  
+  </div>
+ 
+  <span onclick="openNav()"><i class="fa fa-bars"style="color:;position:relative;right:110px;top:10px;font-size:30px;"></i></span>
+  
+  <button onclick="showme()"style="background-color:#e74c3c;color:white;border:solid white;position:relative;left:100px;top:5px;">open</button>
+  
+  
+</header>
+
+
+
+<section id="my-home"class="">
+<!-- Search Section -->
+<div class="search-container">
+  <input type="text" id="searchInput" class="search-bar" placeholder="Search properties...">
+  <button class="search-btn" onclick="filterProperties()">Search</button>
+</div>
+
+<!-- Property Listings -->
+<div class="property-grid">
+  <div class="property-item">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmGVkNd-OLxbWrSvY6OlGxMxJ77foVC9ayFNrnOFgR7zZhHqGnz5_3Rys&s=10"onclick="my()" alt="Property 1">
+    <h3>Elegant Mansion in the Hills</h3>
+    <p>Price: $6,500,000</p>
+    <p>6 Beds, 5 Baths, 5500 sq ft</p>
+  </div>
+  <div class="property-item">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv6ExaCEhN0UD5eWuMok7xUVT48KzvbTqi8w&usqp=CAU" alt="Property 2"onclick="my()">
+    <h3>Spacious Downtown Penthouse</h3>
+    <p>Price: $3,200,000</p>
+    <p>3 Beds, 3 Baths, 2500 sq ft</p>
+  </div>
+  <div class="property-item">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_h2wad-ov9kP9LXEMUDU4Ft34HJwcL2BCfQ&usqp=CAU" alt="Property 3"onclick="my()">
+    <h3>Charming Beach House</h3>
+    <p>Price: $1,800,000</p>
+    <p>4 Beds, 3 Baths, 2800 sq ft</p>
+  </div>
+  
+  
+  <div class="property-item">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmizAa6dv7NBWFiTAXNe1xi9sQe8oy6rUpHA&usqp=CAU" alt="Property 4"onclick="my()">
+    <h3>Luxury Condo in the City</h3>
+    <p>Price: $2,400,000</p>
+    <p>2 Beds, 2 Baths, 1600 sq ft</p>
+  </div>
+  <div class="property-item">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT2qAfL4uGERgAc6Ud3uCb5clA3rS-iudFlw&usqp=CAU" alt="Property 5"onclick="my()">
+    <h3>Modern Farmhouse on Acreage</h3>
+    <p>Price: $4,500,000</p>
+    <p>5 Beds, 4 Baths, 3800 sq ft</p>
+  </div>
+  <div class="property-item">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-m85mF6NaSn3bHBEp2GKk2Si_m3S22EDSzQ&usqp=CAU" alt="Property 6"onclick="my()">
+    <h3>Cozy Cottage by the Lake</h3>
+    <p>Price: $950,000</p>
+    <p>2 Beds, 2 Baths, 1600 sq ft</p>
+  </div>
+</div>
+</section>
+
+<section id="me" class="hidden">
+<div style="text-align:center;margin-top:50px;margin-bottom:50px;">
+<h2><a href="#" style="text-decoration:none;color:black;border:solid yellow;"id="land" >Land</a></h2>
+
+<h2><a href="#" style="text-decoration:none;color:black;border:solid yellow;" id="building">Building</a></h2>
+<h2><a href="#" style="text-decoration:none;color:black;border:solid yellow;" id="house-property">House Property</a></h2>
+<h2><a href="#" style="text-decoration:none;color:black;border:solid yellow;" id="factory">Factory</a></h2>
+<h2><a href="#" style="text-decoration:none;color:black;border:solid yellow;" id="company">Company</a></h2>
+</div>
+</section>
+
+<section id="enter" class="hidden">
+
+<form id="enter-form" style="text-align:center;position:relative;top:30px;">
+<h2 style ="font-size:15px;">Choose the State of your choise.</h2>
+<select id="select-enter"style ="padding: 10px;
+      background-color: white;
+      color: ;
+      border: solid yellow;
+      border-radius: 5px;
+      cursor: pointer;width:235px;background-color:#2c3e50;color:white;"name="state" id="state">
+  <option value="abia">Abia</option>
+  <option value="adamawa">Adamawa</option>
+  <option value="akwaibom">Akwa Ibom</option>
+  <option value="anambra">Anambra</option>
+  <option value="bauchi">Bauchi</option>
+  <option value="bayelsa">Bayelsa</option>
+  <option value="benue">Benue</option>
+  <option value="borno">Borno</option>
+  <option value="cross_river">Cross River</option>
+  <option value="delta">Delta</option>
+  <option value="ebonyi">Ebonyi</option>
+  <option value="edo">Edo</option>
+  <option value="ekiti">Ekiti</option>
+  <option value="enugu">Enugu</option>
+  <option value="gombe">Gombe</option>
+  <option value="imo">Imo</option>
+  <option value="jigawa">Jigawa</option>
+  <option value="kaduna">Kaduna</option>
+  <option value="kano">Kano</option>
+  <option value="kastina">Kastina</option>
+  <option value="kebbi">Kebbi</option>
+  <option value="kogi">Kogi</option>
+  <option value="kwara">Kwara</option>
+  <option value="lagos">Lagos</option>
+  <option value="nasarawa">Nasarawa</option>
+  <option value="niger">Niger</option>
+  <option value="ogun">Ogun</option>
+  <option value="ondo">Ondo</option>
+  <option value="osun">Osun</option>
+  <option value="oyo">Oyo</option>
+  <option value="plateau">Plateau</option>
+  <option value="rivers">Rivers</option>
+  <option value="sokoto">Sokoto</option>
+  <option value="taraba">Taraba</option>
+  <option value="yobe">Yobe</option>
+  <option value="zamfara">Zamfara</option>
+</select><br>
+<input id="name-enter" style="margin-bottom:10px;margin-top:10px;" type="text"placeholder="Full Name"required>
+<input id="number-enter"style="margin-bottom:10px;"type="tel"placeholder="Phone Number"required>
+<input style="margin-bottom:10px;"type="text"placeholder="Adress"required><br>
+
+<input style ="margin-bottom:50px;width:235px;background-color:#2c3e50;color:white;"type="submit">
+</form>
+</section>
+
+
+<section  id="service"class="hidden">
+ <div style="padding: 50px; background-color: #f4f4f4;">
+    <h2 style="text-align: center; font-size: 36px; color: #2c3e50;">Our Services</h2>
+    <p style="text-align: center; font-size: 18px; color: #7f8c8d; margin-bottom: 30px;">At Danvic Real Estate, we offer a range of real estate services tailored to your needs. Whether you're looking to buy, sell, or rent, we are here to help you navigate the real estate market.</p>
+
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+      <!-- Service 1 -->
+      <div style="width: 80%; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); text-align: center;">
+        <i class="fa fa-home" style="font-size: 48px; color: #e74c3c;"></i>
+        <h3 style="font-size: 28px; color: #2c3e50; margin: 20px 0;">Buying Properties</h3>
+        <p style="font-size: 18px; color: #7f8c8d;">We offer expert advice and guidance to help you find your dream home or investment property. From first-time buyers to seasoned investors, our team ensures a seamless experience.</p>
+      </div>
+
+      <!-- Service 2 -->
+      <div style="width: 80%; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); text-align: center;">
+        <i class="fa fa-building" style="font-size: 48px; color: #e74c3c;"></i>
+        <h3 style="font-size: 28px; color: #2c3e50; margin: 20px 0;">Selling Properties</h3>
+        <p style="font-size: 18px; color: #7f8c8d;">Looking to sell your property? Our experienced team offers accurate market analysis, pricing strategy, and marketing services to help you get the best deal for your home or commercial space.</p>
+      </div>
+
+      <!-- Service 3 -->
+      <div style="width: 80%; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); text-align: center;">
+        <i class="fa fa-key" style="font-size: 48px; color: #e74c3c;"></i>
+        <h3 style="font-size: 28px; color: #2c3e50; margin: 20px 0;">Renting Properties</h3>
+        <p style="font-size: 18px; color: #7f8c8d;">Whether you are looking for a residential or commercial rental, we provide comprehensive listings and help you find the perfect rental property to suit your needs and budget.</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <h3 style="font-size: 28px; color: #2c3e50;">Real Estate Consultation</h3>
+      <p style="font-size: 18px; color: #7f8c8d; line-height: 1.6; max-width: 800px; margin: 0 auto;">Our team is here to help with expert consultation on buying, selling, and renting real estate. We guide you through the entire process with personalized attention and industry knowledge, ensuring you make informed decisions every step of the way.</p>
+    </div>
+  </div>
+
+  <div style="background-color: #2c3e50; color: white; padding: 50px 20px; text-align: center;">
+    <h3 style="font-size: 28px;">Contact Us for More Information</h3>
+    <p style="font-size: 18px;">Interested in any of our services? Contact us today to get started with your real estate journey.</p>
+    <a href="contact.html" style="font-size: 20px; color: #e74c3c; text-decoration: none; font-weight: bold;">Get in Touch</a>
+  </div>
+  </section>
+
+
+
+
+<section id="client"class="hidden">
+ <div style="padding: 50px 20px; background-color: #f4f4f4;">
+    <h2 style="text-align: center; font-size: 36px; color: #2c3e50;">Our Valued Clients</h2>
+    <p style="text-align: center; font-size: 18px; color: #7f8c8d; margin-bottom: 40px;">At Danvic Real Estate, we pride ourselves on building strong relationships with our clients. Our success is defined by their satisfaction and trust in our services. Here are some of the amazing clients we've had the pleasure of working with.</p>
+
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+      <!-- Client 1 -->
+      <div style="width: 80%; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); text-align: center;">
+        <i class="fa fa-user-circle" style="font-size: 48px; color: #e74c3c;"></i>
+        <h3 style="font-size: 28px; color: #2c3e50; margin: 20px 0;">John & Sarah Doe</h3>
+        <p style="font-size: 18px; color: #7f8c8d;">"Thanks to Danvic Real Estate, we found our dream home in the perfect neighborhood. Their team was professional and responsive throughout the entire process!"</p>
+      </div>
+
+      <!-- Client 2 -->
+      <div style="width: 80%; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); text-align: center;">
+        <i class="fa fa-user-circle" style="font-size: 48px; color: #e74c3c;"></i>
+        <h3 style="font-size: 28px; color: #2c3e50; margin: 20px 0;">Mark & Lisa Green</h3>
+        <p style="font-size: 18px; color: #7f8c8d;">"Selling our property with Danvic Real Estate was a breeze. Their expert advice and marketing strategy helped us secure a great offer quickly!"</p>
+      </div>
+
+      <!-- Client 3 -->
+      <div style="width: 80%; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); text-align: center;">
+        <i class="fa fa-user-circle" style="font-size: 48px; color: #e74c3c;"></i>
+        <h3 style="font-size: 28px; color: #2c3e50; margin: 20px 0;">Emily & Chris Black</h3>
+        <p style="font-size: 18px; color: #7f8c8d;">"We were looking for a rental property for months and Danvic Real Estate helped us find a perfect place. Their team made everything so easy!"</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <h3 style="font-size: 28px; color: #2c3e50;">More Client Testimonials</h3>
+      <p style="font-size: 18px; color: #7f8c8d; line-height: 1.6; max-width: 800px; margin: 0 auto;">Our clients' feedback motivates us to continuously improve and deliver excellent real estate services. We are committed to making each client's journey smooth and successful, and we are grateful for the trust they place in us.</p>
+    </div>
+  </div>
+
+  <div style="background-color: #2c3e50; color: white; padding: 50px 20px; text-align: center;">
+    <h3 style="font-size: 28px;">Contact Us to Join Our Client Family</h3>
+    <p style="font-size: 18px;">Ready to experience the exceptional service that has helped so many of our clients achieve their real estate goals? Get in touch with us today!</p>
+    <a href="contact.html" style="font-size: 20px; color: #e74c3c; text-decoration: none; font-weight: bold;">Get in Touch</a>
+  </div>
+  </section>
+
+<section id="about"class="hidden"> 
+  <div style="padding: 50px; background-color: #f4f4f4;">
+    <h2 style="text-align: center; font-size: 36px; color: #2c3e50;">About Us</h2>
+    <p style="text-align: center; font-size: 18px; color: #7f8c8d; margin-bottom: 30px;">At Danvic Real Estate, we strive to provide exceptional service to our clients by offering the best real estate options and personalized attention.</p>
+
+    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 40px;">
+      <div style="width: 80%; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);">
+        <h3 style="font-size: 28px; color: #2c3e50;">Who We Are</h3>
+        <p style="font-size: 18px; color: #7f8c8d; line-height: 1.6;">Danvic Real Estate is a full-service real estate agency based in the heart of Manhattan, specializing in residential and commercial properties. Our team of experienced agents works tirelessly to provide personalized services that cater to the individual needs of our clients. Whether you're buying, selling, or renting, we are here to guide you through every step of the process.</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h3 style="font-size: 28px; color: #2c3e50;">Our Mission</h3>
+      <p style="font-size: 18px; color: #7f8c8d; line-height: 1.6; max-width: 800px; margin: 0 auto;">Our mission is to build lasting relationships with our clients and provide the highest level of service. We are committed to understanding your unique needs and delivering exceptional results in every transaction.</p>
+    </div>
+
+    <div style="text-align: center;">
+      <h3 style="font-size: 28px; color: #2c3e50;">Why Choose Us?</h3>
+      <ul style="list-style-type: none; padding: 0; display: inline-block; text-align: left; font-size: 18px; color: #7f8c8d;">
+        <li style="margin-bottom: 15px;">- Professional and Experienced Team</li>
+        <li style="margin-bottom: 15px;">- Extensive Knowledge of Local Markets</li>
+        <li style="margin-bottom: 15px;">- Personalized Services Tailored to Your Needs</li>
+        <li style="margin-bottom: 15px;">- Transparent and Honest Communication</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="background-color: #2c3e50; color: white; padding: 50px 20px; text-align: center;">
+    <h3 style="font-size: 28px; color: white;">Get in Touch</h3>
+    <p style="font-size: 18px;">Ready to make your next real estate move? Contact us today to get started.</p>
+    <a href="contact.html" style="font-size: 20px; color: #e74c3c; text-decoration: none; font-weight: bold;">Contact Us</a>
+  </div>
+  </section>
+
+
+
+<section id="contact"class="hidden">
+  <div style="padding: 50px; background-color: #f4f4f4;">
+    <h2 style="text-align: center; font-size: 36px; color: #2c3e50;">Contact Us</h2>
+    <p style="text-align: center; font-size: 18px; color: #7f8c8d; margin-bottom: 30px;">We'd love to hear from you! Please fill out the form below or reach us using the contact details provided.</p>
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <div style="width: 100%; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);">
+        <form id="contact-form"style=""action="#" method="post">
+          <div style="margin-bottom: 15px;">
+            <label for="name" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Full Name</b></label>
+            <input type="text" id="name" name="name" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+          </div>
+          <div style="margin-bottom: 15px;">
+            <label for="email" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Email Address</b></label>
+            <input type="email" id="email" name="email" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+          </div>
+          <div style="margin-bottom: 15px;">
+            <label for="message" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Message</b></label>
+            <textarea id="message" name="message" rows="6" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required></textarea>
+          </div>
+          <button id="contact-submit"type="submit" style="padding: 12px 20px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; font-size: 18px; cursor: pointer;position:relative;left:15px;">Send Message</button>
+        </form>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px; text-align: center;">
+      <h3 style="font-size: 24px; color: #2c3e50;">Visit Us</h3>
+      <p style="font-size: 18px; color: #7f8c8d;">Gadafi St, Ibori road, Oghara, Delta State</p>
+
+      <h3 style="font-size: 24px; color: #2c3e50;">Call Us</h3>
+      <p style="font-size: 18px; color: #7f8c8d;">+234 (811) 1762-0071</p>
+
+      <h3 style="font-size: 24px; color: #2c3e50;">Email Us</h3>
+      <p style="font-size: 18px; color: #7f8c8d;">danviclook@gmail.com</p>
+
+      <h3 style="font-size: 24px; color: #2c3e50;">Follow Us</h3>
+      <a href="https://www.facebook.com/danvicrealestate" style="font-size: 30px; color: #3b5998; margin: 0 15px; text-decoration: none;"><i class="fa fa-facebook"></i></a>
+      <a href="https://twitter.com/danvicrealestate" style="font-size: 30px; color: #1da1f2; margin: 0 15px; text-decoration: none;"><i class="fa fa-twitter"></i></a>
+      <a href="https://www.instagram.com/danvicrealestate" style="font-size: 30px; color: #e4405f; margin: 0 15px; text-decoration: none;"><i class="fa fa-instagram"></i></a>
+    </div>
+  </div>
+  </section>
+  
+  <section id="sell"class="hidden">
+  <div style="display: flex; justify-content: center; align-items: center;">
+  <div style="width: 100%; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);">
+  <h2 style="margin-top:100px;margin-bottom:50px;width:250px;font-size:10px;padding: 10px 18px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; font-size: 18px; cursor: pointer;position:relative;left:15px;">Please fill the form below</h2>
+  <form id="sell-form"style="text-align:center;"action="#" method="post">
+  <div style="margin-bottom: 15px;">
+  <label for="name" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Full Name</b></label>
+  <input type="text" id="sell-name" name="name" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  <div style="margin-bottom: 15px;">
+  <label for="email" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Email Address</b></label>
+  <input type="email" id="sell-email" name="email" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+  <label for="number" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Phone Number</b></label>
+  <input type="tel" id="sell-number" name="name" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+  <label for="location" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Property Location</b></label>
+  <input type="text" id="sell-location" name="name" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+  <label for="description" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Descriction</b></label>
+  <input type="text" id="sell-description" name="name" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  <div style="margin-bottom: 15px;">
+  <label for="message" style="margin-top:40px;margin-bottom:20px;font-size: px; color: #2c3e50; display: block;"><b>Message on the reason why you want to sell.</b></label>
+  <textarea id="sell-message" name="message" rows="6" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required></textarea>
+  </div>
+  <button id="sell-submit"type="submit" style="margin-top:70px;margin-bottom:80px;padding: 12px 20px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; font-size: 18px; cursor: pointer;position:relative;left:px;width:285px;"><b>Send Message</b></button>
+  </form>
+  </div>
+  </div>
+  
+  </section>
+  
+  
+  
+  
+  <section id="rent"class="hidden">
+  <div style="display: flex; justify-content: center; align-items: center;">
+  <div style="width: 100%; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);">
+  <h2 style="margin-top:100px;margin-bottom:50px;width:250px;font-size:10px;padding: 10px 18px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; font-size: 18px; cursor: pointer;position:relative;left:15px;">Please fill the form below</h2>
+  <form id="rent-form"style="text-align:center;"action="#" method="post">
+  <div style="margin-bottom: 15px;">
+  <label for="name" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Full Name</b></label>
+  <input type="text" id="rent-name" name="name" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  <div style="margin-bottom: 15px;">
+  <label for="email" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Email Address</b></label>
+  <input type="email" id="rent-email" name="email" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+  <label for="number" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Phone Number</b></label>
+  <input type="tel" id="rent-number" name="name" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+  <label for="location" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Your Location</b></label>
+  <input type="text" id="rent-location" name="name" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+  <label for="description" style="margin-bottom:10px;font-size: 18px; color: #2c3e50; display: block;"><b>Descriction Of Your Rent</b></label>
+  <input type="text" id="rent-description" name="name" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required>
+  </div>
+  <div style="margin-bottom: 15px;">
+  <label for="message" style="margin-top:40px;margin-bottom:20px;font-size: px; color: #2c3e50; display: block;"><b>Message on the reason why you want to rent.</b></label>
+  <textarea id="rent-message" name="message" rows="6" style="width: 80%; padding: 12px; border: 1px solid yellow; border-radius: 4px; font-size: 16px;" required></textarea>
+  </div>
+  <button id="rent-submit"type="submit" style="margin-top:70px;margin-bottom:80px;padding: 12px 20px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; font-size: 18px; cursor: pointer;position:relative;left:px;width:285px;"><b>Send Message</b></button>
+  </form>
+  </div>
+  </div>
+  
+  </section>
+</main>
+<footer>
+  <p>&copy; 2024 Danvic Real Estate. All Rights Reserved.</p>
+</footer>
+
+<!-- JavaScript for Filtering -->
+<script>
+  function filterProperties() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const propertyItems = document.querySelectorAll('.property-item');
+
+    propertyItems.forEach(item => {
+      const title = item.querySelector('h3').textContent.toLowerCase();
+      if (title.includes(searchInput)) {
+        item.style.display = 'block';
+      } else {
+        alert('Sorry, your request is not available yet, please search for other things');
+        showSection('my-home');
+      }
+    });
+  }
+  
+  
+  function my(){
+  alert("Your choice as been added to chat, we will get back to you as soon as posible.");}
+  
+  
+  
+   function showme(){
+   alert("we are always active  24/7.");}
+  
+  function openNav() {
+  document.getElementById("myNav").style.width = "100%";
+  }
+  
+  /* Close when someone clicks on the "x" symbol inside the overlay */
+  function closeNav() {
+  document.getElementById("myNav").style.width = "0%";
+  }
+  
+  function Service() {
+  document.getElementById("myNav").style.width = "0%";
+  
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("client").classList.add("hidden");
+  document.getElementById("about").classList.add("hidden");
+  document.getElementById("contact").classList.add("hidden");
+  document.getElementById("sell").classList.add("hidden");
+  document.getElementById("rent").classList.add("hidden");
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("enter").classList.add("hidden");
+  document.getElementById("service").classList.remove("hidden");
+  }
+  
+  
+  
+  function client() {
+  document.getElementById("myNav").style.width = "0%";
+  
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("service").classList.add("hidden");
+  document.getElementById("contact").classList.add("hidden");
+  document.getElementById("about").classList.add("hidden");
+  document.getElementById("sell").classList.add("hidden");
+  document.getElementById("rent").classList.add("hidden");
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("enter").classList.add("hidden");
+  document.getElementById("client").classList.remove("hidden");
+  }
+  
+  function About() {
+  document.getElementById("myNav").style.width = "0%";
+  
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("service").classList.add("hidden");
+  document.getElementById("client").classList.add("hidden");
+  document.getElementById("contact").classList.add("hidden");
+  document.getElementById("sell").classList.add("hidden");
+  document.getElementById("rent").classList.add("hidden");
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("enter").classList.add("hidden");
+  document.getElementById("about").classList.remove("hidden");
+  }
+  
+  function contact() {
+  document.getElementById("myNav").style.width = "0%";
+  
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("service").classList.add("hidden");
+  document.getElementById("client").classList.add("hidden");
+  document.getElementById("about").classList.add("hidden");
+  document.getElementById("sell").classList.add("hidden");
+  document.getElementById("rent").classList.add("hidden");
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("enter").classList.add("hidden");
+  document.getElementById("contact").classList.remove("hidden");
+  }
+  
+  
+  
+  
+  document.getElementById("sell-me").addEventListener("click", function() {
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("service").classList.add("hidden");
+  document.getElementById("client").classList.add("hidden");
+  document.getElementById("about").classList.add("hidden");
+  document.getElementById("contact").classList.add("hidden");
+  document.getElementById("rent").classList.add("hidden");
+  document.getElementById("enter").classList.add("hidden");
+  document.getElementById("sell").classList.remove("hidden");
+  });
+  
+  document.getElementById("buy-me").addEventListener("click", function() {
+  
+  
+  
+  
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("service").classList.add("hidden");
+  document.getElementById("client").classList.add("hidden");
+  document.getElementById("about").classList.add("hidden");
+  document.getElementById("contact").classList.add("hidden");
+  document.getElementById("sell").classList.add("hidden");
+  document.getElementById("rent").classList.add("hidden");
+  document.getElementById("enter").classList.add("hidden");
+  document.getElementById("me").classList.remove("hidden");
+  });
+  
+  
+  document.getElementById("rent-me").addEventListener("click", function() {
+  
+  
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("service").classList.add("hidden");
+  document.getElementById("client").classList.add("hidden");
+  document.getElementById("about").classList.add("hidden");
+  document.getElementById("contact").classList.add("hidden");
+  document.getElementById("sell").classList.add("hidden");
+  document.getElementById("enter").classList.add("hidden");
+  document.getElementById("rent").classList.remove("hidden");
+  });
+  
+  document.getElementById("show-home").addEventListener("click", function() {
+  
+  
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("my-home").classList.add("hidden");
+  document.getElementById("service").classList.add("hidden");
+  document.getElementById("client").classList.add("hidden");
+  document.getElementById("about").classList.add("hidden");
+  document.getElementById("contact").classList.add("hidden");
+  document.getElementById("sell").classList.add("hidden");
+  document.getElementById("rent").classList.add("hidden");
+  document.getElementById("enter").classList.add("hidden");
+  document.getElementById("my-home").classList.remove("hidden");
+  });
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  document.getElementById("land").addEventListener("click", function() {
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("enter").classList.remove("hidden");
+  
+  
+  });
+  document.getElementById("building").addEventListener("click", function() {
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("enter").classList.remove("hidden");
+  });
+  
+  document.getElementById("company").addEventListener("click", function() {
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("enter").classList.remove("hidden");
+  });
+  
+  document.getElementById("factory").addEventListener("click", function() {
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("enter").classList.remove("hidden");
+  });
+  
+  document.getElementById("house-property").addEventListener("click", function() {
+  document.getElementById("me").classList.add("hidden");
+  document.getElementById("enter").classList.remove("hidden");
+  });
+  
+  document.getElementById("enter-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  let select = document.getElementById("select-enter").value;
+  let name = document.getElementById("name-enter").value;
+  let number = document.getElementById("number-enter").value;
+  
+  if (name && number) {
+  alert(`Welcome, ${name}! here are the property we have in ${select}, you can now choose your choice.`);
+  document.getElementById("enter").classList.add("hidden");
+  document.getElementById("my-home").classList.remove("hidden");
+  } else {
+  document.getElementById("enterError").textContent = "Please fill all fields!";
+  }
+  });
+  
+  
+  
+  
+  document.getElementById("contact-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  let Name= document.getElementById("name").value;
+  let Email = document.getElementById("email").value;
+  let Message = document.getElementById("message").value;
+  
+  if (Name && Email) {
+  alert(`Welcome, ${Name} ! Your message has been recieved. We will get back to you as soon as posible through your Email adress (${Email}). Thank you.`);
+  document.getElementById("contact").classList.add("hidden");
+  document.getElementById("my-home").classList.remove("hidden");
+  } else {
+  document.getElementById("enterError").textContent = "Please fill all fields!";
+  }
+  });
+  
+  
+  document.getElementById("sell-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  let Name= document.getElementById("sell-name").value;
+  let Email = document.getElementById("sell-email").value;
+  let Message = document.getElementById("sell-message").value;
+  
+  if (Name && Email) {
+  alert(`Welcome, ${Name} ! Your message has been recieved. We will get back to you as soon as posible through your Email adress (${Email}). Thank you.`);
+  document.getElementById("sell").classList.add("hidden");
+  document.getElementById("my-home").classList.remove("hidden");
+  } else {
+  document.getElementById("enterError").textContent = "Please fill all fields!";
+  }
+  });
+  
+  document.getElementById("rent-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  let Name= document.getElementById("rent-name").value;
+  let Email = document.getElementById("rent-email").value;
+  let Message = document.getElementById("rent-message").value;
+  
+  if (Name && Email) {
+  alert(`Welcome, ${Name} ! Your message has been recieved. We will get back to you as soon as posible through your Email adress (${Email}). Thank you.`);
+  document.getElementById("rent").classList.add("hidden");
+  document.getElementById("my-home").classList.remove("hidden");
+  } else {
+  document.getElementById("enterError").textContent = "Please fill all fields!";
+  }
+  });
+  
+</script>
+
+</body>
+</html>
